@@ -85,19 +85,21 @@ async function groqComplete(system: string, history: Turn[], message: string, gr
 
 /**
  * Primary model with the usual retries (none for a spent daily cap: waiting is pointless). A 429 that is the daily
- * cap, or that survives the retries, is retried ONCE with GROQ_FALLBACK_MODEL; Groq caps are per model.
+ * cap, or that survives the retries, is retried ONCE with GROQ_FALLBACK_MODEL (same retries, never falls back again);
+ * Groq caps are per model.
  */
 async function groqAnswer(system: string, history: Turn[], message: string): Promise<{ reply: string; model: string }> {
   const primary = groqModel();
+  const retryable = (e: unknown) => isGroqTransient(e) && !isGroqDailyCap(e);
   try {
-    const reply = await withRetry(() => groqComplete(system, history, message, primary), 3, (e) => isGroqTransient(e) && !isGroqDailyCap(e));
+    const reply = await withRetry(() => groqComplete(system, history, message, primary), 3, retryable);
     return { reply, model: primary };
   } catch (e) {
     const fallback = groqFallbackModel();
     if ((e as { status?: number }).status !== 429 || !fallback || fallback === primary) throw e;
     console.warn(`[llm] Groq ${primary} rate limited (429); retrying once with fallback model ${fallback}`);
     try {
-      return { reply: await groqComplete(system, history, message, fallback), model: fallback };
+      return { reply: await withRetry(() => groqComplete(system, history, message, fallback), 3, retryable), model: fallback };
     } catch (e2) {
       throw Object.assign(new Error(`${(e as Error).message}; fallback model ${fallback} also failed: ${(e2 as Error).message}`), { status: 429 });
     }
