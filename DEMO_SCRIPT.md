@@ -15,18 +15,18 @@ Goal: a buyer watches this and thinks "that is exactly what my website needs". K
 
 | Time | What you do (exact clicks) | What you say |
 |---|---|---|
-| 0:00-0:10 | Tab 1, landing page. Slowly scroll so the headline and the three bullets are visible. | "Hi, this is DocsChat, an AI chatbot trained on *your own* documents. Here it is loaded with a sample store's price list and policies. It answers customer questions 24/7, never makes things up, and captures leads. Let me show you." |
-| 0:10-0:12 | Click **Try the demo**. | |
-| 0:12-0:25 | Click the suggested question **How much is the Business plan?** (or type it). Pause 2 seconds on the answer, point at the **Source: pricing.md** line. | "Question one, pricing. It answers straight from the uploaded price list, and shows which document the answer came from." |
+| 0:00-0:10 | Tab 1, landing page. Slowly scroll so the headline, the chat preview and the three "how it works" steps are visible. | "Hi, this is DocsChat, an AI chatbot trained on *your own* documents. Here it is loaded with a sample store's price list and policies. It answers customer questions 24/7, never makes things up, and captures leads. Let me show you." |
+| 0:10-0:12 | Click **Try the demo chat**. | |
+| 0:12-0:25 | Click the suggested question **How much is the Business plan?** (or type it). Pause 2 seconds on the answer, point at the **pricing.md** source chip under the answer. | "Question one, pricing. It answers straight from the uploaded price list, and shows which document the answer came from." |
 | 0:25-0:35 | Type: **What is your return policy?** and send. | "Question two, policy. Thirty days, free return label for defects, all from their returns document." |
 | 0:35-0:47 | Type: **Do you sell kayaks?** and send. Pause on the answer. | "Question three is the important one. Kayaks are not in the documents, so instead of inventing an answer it says it can't find it and offers a human follow-up. That is what protects your brand." |
 | 0:47-1:10 | Type: **I'd like a quote for 200 water bottles**. Then, one message at a time: **Jane Cooper**, **jane@acme-outfitters.com**, **Acme Outfitters**, **200 bottles, delivery by March**, then **yes**. Pause on the green confirmation bubble. | "Question four: a buyer asks for a quote. The bot collects name, email, company and details, reads them back, asks to confirm, and saves the lead." |
-| 1:10-1:20 | Switch to tab 2 (`/admin`) and refresh. Point at **Leads (1)** with Jane's row. | "The lead lands in the dashboard instantly, and can also be appended to a Google Sheet." |
-| 1:20-1:30 | Scroll to **Embed on your website**; point at the one-line snippet. | "And it goes on your website with a single line of code. Documents, branding and hosting setup are all included when I build yours. Message me and let's get started." |
+| 1:10-1:20 | Switch to tab 2 (`/admin`) and refresh. Point at the **Leads** section (badge: 1) with Jane's row. | "The lead lands in the dashboard instantly, and can also be appended to a Google Sheet." |
+| 1:20-1:30 | Scroll to **Embed code** (or click it in the section menu); point at the one-line snippet and click **Copy code**. | "And it goes on your website with a single line of code. Documents, branding and hosting setup are all included when I build yours. Message me and let's get started." |
 
 ## Optional 10-second beat (if you are under 80 seconds)
 
-In `/admin` under **Knowledge base**, click **Choose Files**, pick the small PDF, click **Upload & index**. Say: "Updating the bot is just uploading a new file." Then ask one question about that PDF in the chat.
+In `/admin` under **Documents**, drop the small PDF on the upload area (or click **choose files**), then click **Upload and index**. Say: "Updating the bot is just uploading a new file." Then ask one question about that PDF in the chat.
 
 ## The 4 questions (cheat sheet)
 

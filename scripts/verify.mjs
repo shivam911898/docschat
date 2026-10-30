@@ -59,7 +59,8 @@ async function main() {
   if (demo) check("no-key mode flags demo=true", r.json.demo === true);
 
   r = await chat("What is your return policy?");
-  check("returns question answered (30 days)", r.json.reply?.includes("30 days"), r.json.reply?.slice(0, 120));
+  // Some models (gpt-oss) put a narrow no-break space (U+202F) between a number and its unit: compare with plain spaces.
+  check("returns question answered (30 days)", r.json.reply?.replace(/[   ]/g, " ").includes("30 days"), r.json.reply?.slice(0, 120));
 
   r = await chat("Do you sell kayaks?");
   check("out-of-scope question gets the safe fallback (no invention)", /couldn't find|could not find|don't have/i.test(r.json.reply ?? "") && !r.json.sources?.length, r.json.reply?.slice(0, 120));

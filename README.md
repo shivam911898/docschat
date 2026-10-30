@@ -12,10 +12,11 @@ Small businesses lose time and sales to the same repeated questions: "How much i
 
 ## What it does
 
-- **Answers only from your documents.** Upload PDF, TXT or Markdown files. Every answer shows the source file. If the answer is not in your documents, the bot says so and offers a human follow-up instead of guessing.
-- **Captures leads.** Ask for a quote, callback or demo and the bot collects name, email, optional company and message, reads them back, asks for confirmation, then saves the lead to your admin dashboard (and optionally appends it to a Google Sheet).
-- **One-line website widget.** A floating chat bubble for WordPress, Shopify, Wix, Webflow or plain HTML.
-- **Admin dashboard.** Password-protected: upload or delete documents, see captured leads, read the conversation log, copy the embed code.
+- **Answers only from your documents.** Upload PDF, TXT or Markdown files. Every answer shows its source file as a small chip under the reply. If the answer is not in your documents, the bot says so in a highlighted "Not in the documents" panel, offers a human follow-up and a one-click "Request a callback" button instead of guessing.
+- **Captures leads.** Ask for a quote, callback or demo and the bot collects name, email, optional company and message (the panel shows "Step 3 of 5" and Skip / Yes / No buttons), reads them back, asks for confirmation, then saves the lead to your admin dashboard (and optionally appends it to a Google Sheet).
+- **A chat that is easy to use.** Suggested-question chips on an empty conversation, a typing indicator while the answer loads, Enter to send and Shift+Enter for a new line, auto-scroll, and an input bar that stays at the bottom on phones.
+- **One-line website widget.** A floating chat button for WordPress, Shopify, Wix, Webflow or plain HTML. It is keyboard accessible, closes with Escape or its close button, and fills the screen on phones (under 480 px wide).
+- **Admin dashboard.** Password-protected (with a show/hide password field): drag-and-drop document upload with the accepted types and limits stated, delete with a confirmation dialog, captured leads, the conversation log and a copy button for the embed code, each with a guided empty state.
 - **Works without an AI key.** In *demo mode* it returns the best-matching passage from your documents (clearly labelled). Add an AI key (Groq or Gemini) and the same app gives natural, conversational answers.
 - **Safe to leave public.** Chat rate limiting (20 requests/min/IP), 5 MB upload cap, PDF/TXT/MD only, admin behind a password, signed session cookie.
 
@@ -33,7 +34,7 @@ Small businesses lose time and sales to the same repeated questions: "How much i
 |---|
 | ![Mobile chat](docs/screenshot-mobile-chat.png) |
 
-Files expected in `docs/`: `screenshot-landing.png`, `screenshot-chat-answer.png`, `screenshot-chat-lead.png`, `screenshot-admin.png`, `screenshot-mobile-chat.png`. Re-take them with your own branding before sending the project to a client.
+Files expected in `docs/`: `screenshot-landing.png`, `screenshot-chat-answer.png`, `screenshot-chat-lead.png`, `screenshot-admin.png`, `screenshot-mobile-chat.png` (desktop shots are 1280x800, the mobile shot is 390x844). Re-take them with your own branding before sending the project to a client.
 
 ## How it works
 
@@ -79,7 +80,7 @@ npm run dev                 # http://localhost:3000
 
 | URL | What |
 |---|---|
-| `/` | Landing page with the embed snippet |
+| `/` | Landing page: what it does, how it works, features and the copy-ready embed snippet |
 | `/chat` | The chat (also what the widget loads) |
 | `/admin` | Dashboard (log in with `ADMIN_PASSWORD`) |
 | `/api/health` | JSON status: documents, storage, AI or demo mode, provider and model |
@@ -102,11 +103,11 @@ node scripts/smoke-groq.mjs                           # one real question throug
 <script src="https://YOUR-DEPLOYMENT/widget.js" defer></script>
 ```
 
-Paste it before `</body>`. The widget is a floating button that opens the `/chat` page in an iframe.
+Paste it before `</body>`. The widget is a floating button (bottom-right, primary colour) that opens the `/chat` page in an iframe panel. The iframe loads on first hover, focus or click, so it costs the host page nothing until used. Escape or the close button closes the panel; under 480 px wide the panel fills the screen. The same snippet is on the landing page and in the admin, each with a copy button.
 
 ### Add your own documents
 
-Log in at `/admin`, choose files (PDF, TXT or MD, up to 5 MB each), click **Upload & index**. Re-uploading a file with the same name replaces it. Delete the sample documents when you go live. Scanned PDFs without a text layer cannot be read (no OCR).
+Log in at `/admin`, drop files on the **Documents** upload area or choose them (PDF, TXT or MD, up to 5 MB each, 5 files at a time), then click **Upload and index**. Deleting a document asks for confirmation first. Re-uploading a file with the same name replaces it. Delete the sample documents when you go live. Scanned PDFs without a text layer cannot be read (no OCR).
 
 ### Configuration
 
@@ -144,15 +145,15 @@ The recommended free setup is **Vercel + Turso** with a stable public URL. Exact
 
 ## Tech stack
 
-Next.js 15 (App Router) and TypeScript, React 19, plain CSS (no UI libraries), `better-sqlite3` / `@libsql/client` (Turso), Groq via plain `fetch` (OpenAI-compatible API), `@google/genai` (optional Gemini), `google-auth-library` (optional Sheets), `pdf-parse`.
+Next.js 15 (App Router) and TypeScript, React 19, plain CSS in one stylesheet with design tokens as CSS variables (no UI libraries; Inter via `next/font`, self-hosted at build time), `better-sqlite3` / `@libsql/client` (Turso), Groq via plain `fetch` (OpenAI-compatible API), `@google/genai` (optional Gemini), `google-auth-library` (optional Sheets), `pdf-parse`.
 
 ## Project layout
 
 ```
-app/            pages (/, /chat, /admin, /admin/login) and API routes (chat, docs, admin, health)
+app/            pages (/, /chat, /admin, /admin/login), shared components (app/components) and API routes (chat, docs, admin, health); globals.css holds all styles
+public/         widget.js (embed script), favicon.svg, og.png (link-preview image)
 lib/            db adapter, retrieval (rag.ts), provider selection + Groq/Gemini calls with retry (llm.ts), lead flow, auth, rate limit
 sample_docs/    the Northwind Supply Co. demo documents (auto-seeded)
-public/         widget.js (embed script)
 scripts/        verify.mjs (smoke test), smoke-groq.mjs (one real Groq question), seed.ts, embed-samples.mjs
 ```
 
