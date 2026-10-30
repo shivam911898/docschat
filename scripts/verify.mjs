@@ -109,7 +109,8 @@ async function main() {
     return { status: res.status, json: await res.json().catch(() => ({})) };
   };
   let u = await upload(new File([new Uint8Array(5 * 1024 * 1024 + 1).fill(97)], "big.txt", { type: "text/plain" }));
-  check("upload over 5 MB rejected", /too large/i.test(u.json.results?.[0]?.error ?? u.json.error ?? ""), JSON.stringify(u.json));
+  // Vercel caps request bodies at ~4.5 MB and answers 413 before the app runs (no JSON); locally the app itself answers "too large".
+  check("upload over 5 MB rejected", u.status === 413 || /too large/i.test(u.json.results?.[0]?.error ?? u.json.error ?? ""), `${u.status} ${JSON.stringify(u.json)}`);
   u = await upload(new File(["MZ binary"], "malware.exe", { type: "application/octet-stream" }));
   check("upload of .exe rejected", /unsupported/i.test(u.json.results?.[0]?.error ?? ""), JSON.stringify(u.json));
   u = await upload(new File([`# Verify Widget\n\nThe Verify Widget costs $12.34 and ships in zebra-striped boxes.`], `verify-${stamp}.md`, { type: "text/markdown" }));
