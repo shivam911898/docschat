@@ -56,7 +56,7 @@ Files expected in `docs/`: `screenshot-landing.png`, `screenshot-chat-answer.png
 
 - **Provider selection** lives in one place, `lib/llm.ts`. `LLM_PROVIDER` can be `groq`, `gemini` or `none`; when it is empty the app picks Groq if `GROQ_API_KEY` is set, else Gemini if `GEMINI_API_KEY` is set, else none (demo mode). Naming a provider whose key is missing also means none. `/api/health` reports the active `provider` and `model`.
 - **Retrieval.** With Gemini, chunks are embedded (`gemini-embedding-001`) and ranked by cosine similarity computed in plain code - no vector database to run or pay for; chunks indexed before the key was added are embedded automatically on the next question. With Groq (which has no embeddings endpoint) and in demo mode, a local BM25 keyword ranker with light stemming and synonyms is used.
-- **AI answers.** Groq model `openai/gpt-oss-120b` (override with `GROQ_MODEL`; `openai/gpt-oss-20b` is faster and cheaper) through its OpenAI-compatible API, called with plain `fetch`; or Gemini `gemini-3.1-flash-lite` (override with `GEMINI_MODEL`). Both get the same strict prompt: answer only from the retrieved passages, temperature 0.1, say "I don't know" and give the fallback contact otherwise. Transient errors (429, 5xx, network) are retried with exponential backoff (Groq: 3 tries, about 1s then 2s; Gemini: 4 tries); if the model stays unavailable the visitor still gets the best-matching text from the documents (reported as `mode: "extractive"`). The demo-mode banner is shown only when no provider is configured.
+- **AI answers.** Groq model `openai/gpt-oss-120b` (override with `GROQ_MODEL`; `openai/gpt-oss-20b` is faster and cheaper) through its OpenAI-compatible API, called with plain `fetch`; or Gemini `gemini-3.1-flash-lite` (override with `GEMINI_MODEL`). Both get the same strict prompt: answer only from the retrieved passages, temperature 0.1, say "I don't know" and give the fallback contact otherwise. Transient errors (429, 5xx, network) are retried with exponential backoff (Groq: 3 tries, about 1s then 2s; Gemini: 4 tries); on Groq a 429 that says the daily token cap is spent (or that survives the retries) is retried once on `GROQ_FALLBACK_MODEL`, because Groq caps tokens per model; if the model stays unavailable the visitor still gets the best-matching text from the documents (reported as `mode: "extractive"`). The demo-mode banner is shown only when no provider is configured.
 
 #### Groq vs Gemini
 
@@ -92,6 +92,7 @@ npm run build && npm start          # production build
 npm run seed                        # re-index the sample documents
 npm run verify                      # end-to-end smoke test against a running server
 node scripts/verify.mjs https://your-app.vercel.app   # ...or against a deployed URL
+npm run test:llm                    # offline: Groq model fallback against a local fake Groq server
 node scripts/smoke-groq.mjs                           # one real question through a running app on Groq (needs GROQ_API_KEY)
 ```
 
@@ -119,6 +120,7 @@ All settings are environment variables; see [.env.example](.env.example).
 | `LLM_PROVIDER` | Optional: `groq`, `gemini` or `none`. Empty = auto: Groq if `GROQ_API_KEY` is set, else Gemini if `GEMINI_API_KEY` is set, else none (demo mode). |
 | `GROQ_API_KEY` | Optional. Enables conversational AI answers via Groq (keyword retrieval). |
 | `GROQ_MODEL` | Default `openai/gpt-oss-120b` (alternative: `openai/gpt-oss-20b`). |
+| `GROQ_FALLBACK_MODEL` | Default `openai/gpt-oss-20b`; used automatically when the primary model's daily cap is hit (HTTP 429 "tokens per day"). Empty = off. `/api/chat` reports the model that answered in `model`. |
 | `GROQ_BASE_URL` | Default `https://api.groq.com/openai/v1`. Override only for a proxy or a test server. |
 | `GEMINI_API_KEY` | Optional. Enables conversational AI answers and semantic embeddings via Gemini. |
 | `GEMINI_MODEL` | Default `gemini-3.1-flash-lite`. |
@@ -154,7 +156,7 @@ app/            pages (/, /chat, /admin, /admin/login), shared components (app/c
 public/         widget.js (embed script), favicon.svg, og.png (link-preview image)
 lib/            db adapter, retrieval (rag.ts), provider selection + Groq/Gemini calls with retry (llm.ts), lead flow, auth, rate limit
 sample_docs/    the Northwind Supply Co. demo documents (auto-seeded)
-scripts/        verify.mjs (smoke test), smoke-groq.mjs (one real Groq question), seed.ts, embed-samples.mjs
+scripts/        verify.mjs (smoke test), test-llm-fallback.mjs (offline Groq fallback test), smoke-groq.mjs (one real Groq question), seed.ts, embed-samples.mjs
 ```
 
 ## License

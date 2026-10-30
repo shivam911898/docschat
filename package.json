@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "next start",
     "seed": "tsx scripts/seed.ts",
-    "verify": "node scripts/verify.mjs"
+    "verify": "node scripts/verify.mjs",
+    "test:llm": "tsx scripts/test-llm-fallback.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.31.0",

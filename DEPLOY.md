@@ -106,6 +106,7 @@ Without a key the app still works in demo mode (best-matching text with a visibl
 | `LLM_PROVIDER` | no | `groq`, `gemini` or `none`. Empty = Groq if `GROQ_API_KEY` is set, else Gemini if `GEMINI_API_KEY` is set, else none. |
 | `GROQ_API_KEY` | no | Enables conversational answers via Groq (keyword retrieval, no embeddings). |
 | `GROQ_MODEL` | no | Default `openai/gpt-oss-120b` (alternative: `openai/gpt-oss-20b`). |
+| `GROQ_FALLBACK_MODEL` | no | Default `openai/gpt-oss-20b`; used automatically when the primary model's daily cap is hit. Empty = off. |
 | `GROQ_BASE_URL` | no | Default `https://api.groq.com/openai/v1`. Only for proxies or tests. |
 | `GEMINI_API_KEY` | no | Enables conversational answers and semantic embeddings via Gemini. |
 | `GEMINI_MODEL` | no | Default `gemini-3.1-flash-lite`. |

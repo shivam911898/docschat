@@ -23,7 +23,7 @@ async function main() {
     body: JSON.stringify({ message: QUESTION, history: [], sessionId: "smoke-groq-" + Date.now() }),
   });
   const j = await r.json().catch(() => ({}));
-  console.log(`\nQ: ${QUESTION}\nA: ${j.reply ?? JSON.stringify(j)}\nsources=${JSON.stringify(j.sources)} mode=${j.mode} status=${r.status}`);
+  console.log(`\nQ: ${QUESTION}\nA: ${j.reply ?? JSON.stringify(j)}\nsources=${JSON.stringify(j.sources)} mode=${j.mode} model=${j.model} status=${r.status}`);
 
   if (j.mode !== "ai") {
     console.error("\nThe answer came from the extractive fallback, so the Groq call failed after retries. Check the server log (bad key, quota, or model name in GROQ_MODEL).");
