@@ -2,6 +2,8 @@
 
 **An AI chatbot trained on your own documents.** Upload your FAQs, price lists and policies; DocsChat answers customer questions from them 24/7, says "I don't know" instead of making things up, and captures a lead whenever someone asks for a quote, a callback or a demo. Embed it on any website with one line of code.
 
+**Live demo:** <https://docschat-one.vercel.app> — chat at [/chat](https://docschat-one.vercel.app/chat); try "How much is the Business plan?" or "Can I return an opened item?"
+
 > The live demo uses a fictional US store, **Northwind Supply Co.**, with sample pricing, shipping, returns and product documents (all prices in USD).
 
 ## The problem

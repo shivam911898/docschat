@@ -1,6 +1,6 @@
 # Fiverr gig and Upwork copy: DocsChat
 
-Replace `[LIVE DEMO URL]` with the deployed URL and `[LOOM LINK]` with the demo video before publishing.
+Replace `https://docschat-one.vercel.app` with the deployed URL and `[LOOM LINK]` with the demo video before publishing.
 
 ## Gig title (69 characters, limit 80)
 
@@ -43,7 +43,7 @@ What you get:
 - Lead capture, spam protection and rate limiting
 - Deployed on a free tier with a stable URL
 
-Try the live demo: [LIVE DEMO URL]
+Try the live demo: https://docschat-one.vercel.app
 Watch the 60-second walkthrough: [LOOM LINK]
 
 ## FAQ (5 questions)
@@ -73,4 +73,4 @@ You do. You receive the full source code under the MIT licence, the documents an
 
 ## Upwork portfolio blurb
 
-**DocsChat - AI chatbot trained on your documents.** A full-stack Next.js app that answers customer questions strictly from uploaded PDFs, FAQs and policies (with source citations and a safe "I don't know" fallback), captures leads through a guided quote/callback flow, and embeds on any site with one line of code. Includes a password-protected admin, rate limiting, retrieval-augmented answers from an AI key (Groq or Gemini) with a keyword-search fallback, and free-tier deployment on Vercel + Turso. Live demo: [LIVE DEMO URL]
+**DocsChat - AI chatbot trained on your documents.** A full-stack Next.js app that answers customer questions strictly from uploaded PDFs, FAQs and policies (with source citations and a safe "I don't know" fallback), captures leads through a guided quote/callback flow, and embeds on any site with one line of code. Includes a password-protected admin, rate limiting, retrieval-augmented answers from an AI key (Groq or Gemini) with a keyword-search fallback, and free-tier deployment on Vercel + Turso. Live demo: https://docschat-one.vercel.app
