@@ -1,28 +1,32 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { adminConfigured, isAdmin } from "../../../lib/auth";
+import Logo from "../../components/Logo";
+import LoginForm from "./LoginForm";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Admin login - DocsChat" };
+export const metadata: Metadata = { title: "Admin login", robots: { index: false, follow: false } };
 
 export default async function Login({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   if (adminConfigured() && (await isAdmin())) redirect("/admin");
   const { error } = await searchParams;
   return (
-    <div className="container">
-      <div className="card login">
-        <h2>Admin login</h2>
+    <main className="auth-page">
+      <div className="card auth-card">
+        <a className="brand" href="/"><Logo size={32} /><span>DocsChat</span></a>
+        <h1>Admin login</h1>
         {!adminConfigured() ? (
-          <p className="msg-err">Admin is locked: set the <code>ADMIN_PASSWORD</code> environment variable and restart.</p>
+          <div className="alert danger" role="alert">
+            Admin is locked. Set the <code>ADMIN_PASSWORD</code> environment variable and restart the app.
+          </div>
         ) : (
-          <form action="/api/admin/login" method="post">
-            <label htmlFor="password" className="hint">Password</label>
-            <input id="password" type="password" name="password" autoComplete="current-password" autoFocus required />
-            {error && <p className="msg-err">{error === "rate" ? "Too many attempts - wait a minute." : "Wrong password."}</p>}
-            <button className="btn primary">Log in</button>
-          </form>
+          <>
+            <p className="muted">Enter the admin password for this deployment to manage documents and leads.</p>
+            <LoginForm error={error} />
+          </>
         )}
         <p className="hint"><a href="/">&larr; Back to home</a></p>
       </div>
-    </div>
+    </main>
   );
 }
